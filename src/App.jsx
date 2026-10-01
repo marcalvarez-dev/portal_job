@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import data from './data.json'
 import Header from './components/Header'
+import JobCard from './components/JobCard'
+import Footer from './components/Footer'
+import Select from './components/Select'
 
 console.log(data)
 
@@ -32,7 +35,7 @@ function App() {
                 <input id="searchbar" type="text" placeholder="Busca trabajos, empresas o habilidades" />
               </div>
               <div>
-                <select id="filter-technology" name="select">
+                {/* <select id="filter-technology" name="select">
                   <option value="value1">Tecnología</option>
                   <option value="js">JavaScript</option>
                   <option value="python">Python</option>
@@ -45,37 +48,27 @@ function App() {
                   <option value="remote">Remoto</option>
                   <option value="barcelona">Barcelona</option>
                   <option value="madrid">Madird</option>
-                </select>
+                </select> */}
 
-                <select name="select">
-                  <option value="value1">Nivel de experiencia</option>
-                </select>
+
+                <Select id="filter-technology" options={["JavaScript", "Python", "Java", "React", "Node.js"]} />
+                <Select id="filter-location" options={["Remoto", "Barcelona", "Madrid"]} />
+
               </div>
             </form>
           </header>
           <footer className="jobs-results">
             <h3>Resultados de busqueda</h3>
+            {/* <JobCard data={{ modalidad: "remoto", nivel: "junior", tech: "Java" }} titulo="Desarrollador Java" empresa="Tech Corp" ubicacion="Madrid" descripcion="Buscamos un desarrollador Java con experiencia en Spring Framework." /> */}
+            {data.map(job => {
+              return <JobCard key={job.id} data={job.data} titulo={job.titulo} empresa={job.empresa} ubicacion={job.ubicacion} descripcion={job.descripcion} />
+            })}
           </footer>
         </section>
 
       </main>
 
-      <footer id="footer">
-        <nav className="pagination">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M15 6l-6 6l6 6" />
-          </svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M9 6l6 6l-6 6" />
-          </svg>
-        </nav>
-      </footer>
+      <Footer />
 
     </>
   )
