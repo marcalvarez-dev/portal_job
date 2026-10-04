@@ -1,3 +1,5 @@
+import styles from './Pagination.module.css'
+
 function Pagination({ currentPage = 1, totalPage = 10, onPageChange }) {
     const pages = Array.from({ length: totalPage }, (_, index) => index + 1);
 
@@ -10,13 +12,28 @@ function Pagination({ currentPage = 1, totalPage = 10, onPageChange }) {
 
     const handlePrevClick = (event) => {
         event.preventDefault()
-
+        if (!firstPage) {
+            onPageChange(currentPage - 1)
+        }
     }
 
+    const handleNextClick = (event) => {
+        event.preventDefault()
+        if (!lastPage) {
+            onPageChange(currentPage + 1)
+        }
+    }
+
+    const handleChangePage = (event, page) => {
+        event.preventDefault()
+        if (page !== currentPage) {
+            onPageChange(page)
+        }
+    }
 
     return (
-        <nav className="pagination">
-            <a href="#" style={stylePrevButton}>
+        <nav className={styles.pagination}>
+            <a href="#" style={stylePrevButton} onClick={handlePrevClick}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -28,14 +45,17 @@ function Pagination({ currentPage = 1, totalPage = 10, onPageChange }) {
 
 
             {pages.map((page) => (
-                <a className={currentPage === page ? "is-active" : ""}
+                <a
+                    key={page}
+                    className={currentPage === page ? styles.isActive : ""}
+                    onClick={(event) => handleChangePage(event, page)}
                     href="#">
                     {page}
                 </a>
             ))
             }
 
-            <a href="#" style={styleNextButton}>
+            <a href="#" style={styleNextButton} onClick={handleNextClick}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                     className="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right">

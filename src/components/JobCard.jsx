@@ -1,18 +1,32 @@
-function JobCard({ data, titulo, empresa, ubicacion, descripcion }) {
+import { useState } from 'react'
+
+function JobCard({ job }) {
+    const [isApplied, setIsApplied] = useState(false)
+
+    const handleApplyChange = () => {
+        setIsApplied(true)
+    }
+
+    const buttonClasses = isApplied ? "button-apply applied" : "button-apply"
+    const buttonText = isApplied ? "Aplicado" : "Aplicar"
     return (
         <article
             className="job-article"
-            data-modalidad={data?.modalidad}
-            data-nivel={data?.nivel}
-            data-tech={data?.technology} >
+            data-modalidad={job?.modalidad}
+            data-nivel={job?.nivel}
+            data-tech={job?.technology} >
 
             <div>
-                <h2>{titulo}</h2>
-                <h5>{empresa} | {ubicacion}</h5>
-                <p>{descripcion}</p>
+                <h2>{job.titulo}</h2>
+                <h5>{job.empresa} | {job.ubicacion}</h5>
+                <p>{job.descripcion}</p>
             </div>
             <div>
-                <button className="button-apply" id="important-button"> Aplicar </button>
+                <button className={buttonClasses}
+                    onClick={handleApplyChange}
+                    id="important-button">
+                    {buttonText}
+                </button>
             </div>
         </article >
     )
