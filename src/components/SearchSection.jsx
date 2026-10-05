@@ -2,7 +2,7 @@ import JobListings from './JobListings'
 import Select from './Select'
 import { useId } from 'react'
 
-function SearchSection({ jobs, onSearch, onTextFilter }) {
+function SearchSection({ jobs, onSearch }) {
 
     const idInput = useId()
     const idTechnology = useId()
@@ -13,20 +13,17 @@ function SearchSection({ jobs, onSearch, onTextFilter }) {
         event.preventDefault()
         const formData = new FormData(event.target)
         const filters = {
-            search: formData.get(idInput),
             technology: formData.get(idTechnology),
             location: formData.get(idLocation),
             experience: formData.get(idExperience)
         }
 
-        onSearch(filters)
+        const text = formData.get(idInput)
+
+        onSearch(filters, text)
     }
 
-    const handleTextChange = (event) => {
-        const text = event.target.value
-        onTextFilter(text)
 
-    }
 
     return (
         <section className="results">
@@ -44,13 +41,30 @@ function SearchSection({ jobs, onSearch, onTextFilter }) {
                             <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                             <path d="M21 21l-6 -6" />
                         </svg>
-                        <input id="searchbar" name={idInput} type="text" onChange={handleTextChange} placeholder="Busca trabajos, empresas o habilidades" />
+                        <input id="searchbar" name={idInput} type="text" placeholder="Busca trabajos, empresas o habilidades" />
                         <button type="submit">Buscar</button>
                     </div>
                     <div>
-                        <Select id="filter-technology" name={idTechnology} options={["JavaScript", "Python", "Java", "React", "Node.js"]} />
-                        <Select id="filter-location" name={idLocation} options={["Remoto", "Barcelona", "Madrid"]} />
-                        <Select id="filter-experience" name={idExperience} options={["Junior", "Semi Senior", "Senior"]} />
+                        <Select id="filter-technology" name={idTechnology} options={[
+                            { value: "", label: "Tecnología" },
+                            { value: "js", label: "JavaScript" },
+                            { value: "python", label: "Python" },
+                            { value: "java", label: "Java" },
+                            { value: "react", label: "React" },
+                            { value: "node", label: "Node.js" }
+                        ]} />
+                        <Select id="filter-location" name={idLocation} options={[
+                            { value: "", label: "Ubicación" },
+                            { value: "remoto", label: "Remoto" },
+                            { value: "barcelona", label: "Barcelona" },
+                            { value: "madrid", label: "Madrid" }
+                        ]} />
+                        <Select id="filter-experience" name={idExperience} options={[
+                            { value: "", label: "Experiencia" },
+                            { value: "junior", label: "Junior" },
+                            { value: "semi-senior", label: "Semi Senior" },
+                            { value: "senior", label: "Senior" }
+                        ]} />
 
                     </div>
                 </form>
