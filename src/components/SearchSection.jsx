@@ -1,29 +1,47 @@
 import JobListings from './JobListings'
 import Select from './Select'
-import { useId } from 'react'
+import { useId, useState } from 'react'
 
-function SearchSection({ jobs, onSearch }) {
-
-    const idInput = useId()
-    const idTechnology = useId()
-    const idLocation = useId()
-    const idExperience = useId()
+const useSearchForm = ({ idTechnology, idLocation, idExperience, onSearch, onTextFilter }) => {
+    const [searchText, setSearchText] = useState("")
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        const formData = new FormData(event.target)
+
+        const formData = new FormData(event.currentTarget)
+
         const filters = {
             technology: formData.get(idTechnology),
             location: formData.get(idLocation),
             experience: formData.get(idExperience)
         }
 
-        const text = formData.get(idInput)
-
-        onSearch(filters, text)
+        onSearch(filters)
     }
 
+    const handleTextChange = (event) => {
+        const text = event.target.value
+        setSearchText(text)
+        onTextFilter(text)
+    }
 
+    return {
+        searchText,
+        handleSubmit,
+        handleTextChange
+    }
+
+}
+function SearchSection({ jobs, onSearch, onTextFilter }) {
+    const idInput = useId()
+    const idTechnology = useId()
+    const idLocation = useId()
+    const idExperience = useId()
+
+    const {
+        handleSubmit,
+        handleTextChange
+    } = useSearchForm({ idTechnology, idLocation, idExperience, onSearch, onTextFilter })
 
     return (
         <section className="results">
@@ -32,7 +50,7 @@ function SearchSection({ jobs, onSearch }) {
                 <p>
                     Explora miles de oportunidades en el sector tecnologico
                 </p>
-                <form onSubmit={handleSubmit} id="serch-job" role="search">
+                <form onChange={handleSubmit} id="serch-job" role="search">
                     <div className="search-box">
                         <svg xmlns=" http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -41,8 +59,13 @@ function SearchSection({ jobs, onSearch }) {
                             <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                             <path d="M21 21l-6 -6" />
                         </svg>
-                        <input id="searchbar" name={idInput} type="text" placeholder="Busca trabajos, empresas o habilidades" />
-                        <button type="submit">Buscar</button>
+                        <input
+                            id="searchbar"
+                            name={idInput}
+                            type="text"
+                            placeholder="Busca trabajos, empresas o habilidades"
+                            onChange={handleTextChange} />
+                        {/* <button type="submit">Buscar</button> */}
                     </div>
                     <div>
                         <Select id="filter-technology" name={idTechnology} options={[
